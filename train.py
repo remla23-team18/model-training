@@ -32,18 +32,16 @@ cv = CountVectorizer(max_features = 1420)
 X = cv.fit_transform(corpus).toarray()
 y = dataset.iloc[:, -1].values
 
-# Create the train folder if it doesn't exist
-if not os.path.exists('models'):
-    os.makedirs('models')
-
-# Saving BoW dictionary to later use in prediction
-bow_path = 'models/c1_BoW_Sentiment_Model.pkl'
-pickle.dump(cv, open(bow_path, "wb"))
-
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20, random_state = 0)
 classifier = GaussianNB()
 classifier.fit(X_train, y_train)
 
+
+# Create the train folder if it doesn't exist
+if not os.path.exists('models'):
+    os.makedirs('models')
+# Saving BoW dictionary to later use in prediction
+pickle.dump(cv, open('models/c1_BoW_Sentiment_Model.pkl', "wb"))
 # Saving the classifier model to later use in prediction
 joblib.dump(classifier, 'models/c2_Classifier_Sentiment_Model') 
 
