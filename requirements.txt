@@ -1,5 +1,0 @@
-numpy
-pandas
-nltk
-joblib
-scikit-learn
