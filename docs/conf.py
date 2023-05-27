@@ -1,4 +1,5 @@
 """Sphinx configuration."""
+# pylint: disable-all
 project = "Model Training"
 author = "remla23-team18"
 copyright = "2023, remla23-team18"

@@ -1,4 +1,6 @@
 """Nox sessions."""
+# Disable pylint, this is an auto-generated file.
+# pylint: disable-all
 import os
 import shlex
 import shutil
