@@ -8,7 +8,7 @@ import joblib
 import os
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
-from preprocess import clean_review
+from src.model_training.preprocess import clean_review
 
 dataset = pd.read_csv('a1_RestaurantReviews_HistoricDump.tsv', delimiter = '\t', quoting = 3)
 
