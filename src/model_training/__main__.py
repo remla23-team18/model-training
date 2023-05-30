@@ -7,7 +7,7 @@ from .preprocess import clean_cli
 from .train import train_model
 
 
-logger = logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO)
 
 
 @click.group()

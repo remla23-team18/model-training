@@ -3,10 +3,10 @@ import logging
 import re
 
 import click
-import nltk
+import nltk  # type: ignore
 from click import echo
-from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
+from nltk.corpus import stopwords  # type: ignore
+from nltk.stem.porter import PorterStemmer  # type: ignore
 
 
 logger = logging.getLogger(__name__)
@@ -16,7 +16,7 @@ def setup_stopwords() -> list[str]:
     """Download stopwords."""
     logger.debug("Downloading stopwords...")
     nltk.download("stopwords", quiet=True)
-    all_stopwords = stopwords.words("english")
+    all_stopwords: list[str] = stopwords.words("english")
     all_stopwords.remove("not")
 
     return all_stopwords
@@ -42,9 +42,11 @@ def clean_review(review: str, all_stopwords: list[str]) -> str:
 
     review = re.sub("[^a-zA-Z]", " ", review)
     review = review.lower()
-    review = review.split()
-    review = [ps.stem(word) for word in review if word not in set(all_stopwords)]
-    review = " ".join(review)
+    review_words = review.split()
+    review_words_striped = [
+        ps.stem(word) for word in review_words if word not in set(all_stopwords)
+    ]
+    review = " ".join(review_words_striped)
     logger.debug(f"Cleaned review: {review}")
     return review
 

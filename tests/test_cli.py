@@ -3,6 +3,8 @@ import pytest
 from click.testing import CliRunner
 
 from model_training import __main__
+from model_training import preprocess
+from model_training import train
 
 
 @pytest.fixture
@@ -19,12 +21,12 @@ def test_cli_succeeds(runner: CliRunner) -> None:
 
 def test_clean(runner: CliRunner) -> None:
     """It exits with a status code of zero."""
-    result = runner.invoke(__main__.clean_cli, ["This is a test."])
+    result = runner.invoke(preprocess.clean_cli, ["This is a test."])
     assert result.exit_code == 0
     assert result.output == "Cleaned review: test\n"
 
 
 def test_train(runner: CliRunner) -> None:
     """It exits with a status code of zero."""
-    result = runner.invoke(__main__.train_model)
+    result = runner.invoke(train.train_model)
     assert result.exit_code == 0

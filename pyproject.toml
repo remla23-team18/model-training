@@ -23,6 +23,7 @@ pandas = "^2.0.1"
 nltk = "^3.8.1"
 joblib = "^1.2.0"
 scikit-learn = "^1.2.2"
+pandas-stubs = "^2.0.1.230501"
 
 [tool.poetry.scripts]
 model-training = "model_training.__main__:cli"

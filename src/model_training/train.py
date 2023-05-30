@@ -4,11 +4,11 @@ import pickle
 from pathlib import Path
 
 import click
-import joblib
+import joblib  # type: ignore
 import pandas as pd
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import GaussianNB
+from sklearn.feature_extraction.text import CountVectorizer  # type: ignore
+from sklearn.model_selection import train_test_split  # type: ignore
+from sklearn.naive_bayes import GaussianNB  # type: ignore
 
 from .preprocess import clean_review
 from .preprocess import setup_stopwords
@@ -64,14 +64,14 @@ def train_model(
     classifier.fit(X_train, y_train)
 
     logger.info("Saving the model...")
-    output_dir = Path(output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir_path = Path(output_dir)
+    output_dir_path.mkdir(parents=True, exist_ok=True)
 
     logger.debug("Saving the count vectorizer to later use in prediction")
-    pickle.dump(cv, open(output_dir / count_vectorizer_artifact_name, "wb"))
+    pickle.dump(cv, open(output_dir_path / count_vectorizer_artifact_name, "wb"))
 
     logger.debug("Saving the classifier to later use in prediction")
-    joblib.dump(classifier, output_dir / classifier_artifact_name)
+    joblib.dump(classifier, output_dir_path / classifier_artifact_name)
 
     # Model performance measure
     # y_pred = classifier.predict(X_test)
