@@ -18,6 +18,16 @@ from .preprocess import setup_stopwords
 logger = logging.getLogger(__name__)
 
 
+def _create_corpus(dataset: pd.DataFrame) -> list[str]:
+    corpus = []
+    logger.debug("Cleaning and tokenizing reviews...")
+    all_stopwords = setup_stopwords()
+    for review_idx in range(0, dataset["Review"].size):
+        review = clean_review(dataset["Review"][review_idx], all_stopwords)
+        corpus.append(review)
+    return corpus
+
+
 @click.command(name="train")
 @click.option(
     "--output-dir",
@@ -82,11 +92,7 @@ def train_model(
         logger.debug("Preprocessing the dataset...")
         dataset = pd.read_csv(dataset_path, delimiter="\t", quoting=3)
 
-        logger.debug("Cleaning and tokenizing reviews...")
-        all_stopwords = setup_stopwords()
-        for i in range(0, dataset["Review"].size):
-            review = clean_review(dataset["Review"][i], all_stopwords)
-            corpus.append(review)
+        corpus = _create_corpus(dataset)
     else:
         logger.debug("Loading the preprocessed dataset...")
         dataset = pd.read_csv(
@@ -96,8 +102,9 @@ def train_model(
         logger.debug("Corpus size: %d", len(corpus))
 
     logger.debug("Creating the Bag of Words model...")
-    cv = CountVectorizer(max_features=1420)
-    X = cv.fit_transform(corpus).toarray()
+    count_vectorizer = CountVectorizer(max_features=1420)
+
+    X = count_vectorizer.fit_transform(corpus).toarray()
     y = dataset.iloc[:, -1].values
 
     logger.info("Splitting the dataset into the Training set and Test set...")
@@ -113,7 +120,8 @@ def train_model(
     output_dir_path.mkdir(parents=True, exist_ok=True)
 
     logger.debug("Saving the count vectorizer to later use in prediction")
-    pickle.dump(cv, open(output_dir_path / count_vectorizer_artifact_name, "wb"))
+    with open(output_dir_path / count_vectorizer_artifact_name, "wb") as output_file:
+        pickle.dump(count_vectorizer, output_file)
 
     logger.debug("Saving the classifier to later use in prediction")
     joblib.dump(classifier, output_dir_path / classifier_artifact_name)

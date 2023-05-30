@@ -39,17 +39,19 @@ def clean_review(review: str, all_stopwords: list[str]) -> str:
     review : str
         Cleaned review text.
     """
-    logger.debug(f"Cleaning {review}...")
-    ps = PorterStemmer()
+    logger.debug("Cleaning %s...", review)
+    porter_stemmer = PorterStemmer()
 
     review = re.sub("[^a-zA-Z]", " ", review)
     review = review.lower()
     review_words = review.split()
     review_words_striped = [
-        ps.stem(word) for word in review_words if word not in set(all_stopwords)
+        porter_stemmer.stem(word)
+        for word in review_words
+        if word not in set(all_stopwords)
     ]
     review = " ".join(review_words_striped)
-    logger.debug(f"Cleaned review: {review}")
+    logger.debug("Cleaned review: %s", review)
     return review
 
 
@@ -57,8 +59,8 @@ def clean_review(review: str, all_stopwords: list[str]) -> str:
 @click.argument("review")
 def clean_cli(review: str) -> None:
     """Clean a review."""
-    stopwords = setup_stopwords()
-    review = clean_review(review, stopwords)
+    all_stopwords = setup_stopwords()
+    review = clean_review(review, all_stopwords)
 
     echo(f"Cleaned review: {review}")
 
