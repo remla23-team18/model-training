@@ -23,10 +23,9 @@ pandas = "^2.0.1"
 nltk = "^3.8.1"
 joblib = "^1.2.0"
 scikit-learn = "^1.2.2"
-dvc = "^2.58.1"
 
 [tool.poetry.scripts]
-model-training = "model_training.__main__:main"
+model-training = "model_training.__main__:cli"
 
 [tool.poetry.group.dev.dependencies]
 mllint = "^0.12.2"
@@ -56,6 +55,7 @@ sphinx-click = ">=3.0.2"
 typeguard = ">=2.13.3"
 xdoctest = {extras = ["colors"], version = ">=0.15.10"}
 myst-parser = {version = ">=0.16.1"}
+dvc = "^2.58.1"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
