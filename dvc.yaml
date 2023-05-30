@@ -1,0 +1,7 @@
+stages:
+  train:
+    cmd: poetry run model-training train
+    deps:
+      - a1_RestaurantReviews_HistoricDump.tsv
+    outs:
+      - models

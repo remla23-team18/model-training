@@ -1,0 +1,13 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: poetry run model-training train
+    deps:
+    - path: a1_RestaurantReviews_HistoricDump.tsv
+      md5: 102f1f4193e0bdebdd6cce7f13e0a839
+      size: 54686
+    outs:
+    - path: models
+      md5: b39b7e3bda300ed65a74c64ef063b66d.dir
+      size: 86040
+      nfiles: 2
