@@ -16,7 +16,6 @@ logging.basicConfig(level=logging.INFO)
 @click.version_option()
 def cli() -> None:
     """Command line tool to train a sentiment analysis on restaurant reviews."""
-    pass  # pragma: no cover
 
 
 cli.add_command(train_model)
