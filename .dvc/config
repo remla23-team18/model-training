@@ -1,2 +1,6 @@
 [core]
     analytics = false
+    remote = remla-gdrive
+['remote "remla-gdrive"']
+    url = gdrive://1-qM-IOPYUc8H2Z7KyDNvpRo_haGS8ciV
+    gdrive_acknowledge_abuse = true
