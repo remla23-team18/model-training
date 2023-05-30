@@ -11,3 +11,6 @@ __pycache__/
 /a1_RestaurantReviews_HistoricDump.tsv
 /models
 /a2_RestaurantReviews_Preprocessed.tsv
+/coverage.xml
+/tests-report.xml
+/mllint-report.md

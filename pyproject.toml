@@ -57,6 +57,7 @@ typeguard = ">=2.13.3"
 xdoctest = {extras = ["colors"], version = ">=0.15.10"}
 myst-parser = {version = ">=0.16.1"}
 dvc = "^2.58.1"
+pytest-cov = "^4.1.0"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
@@ -84,14 +85,22 @@ show_error_codes = true
 show_error_context = true
 
 [tool.mllint.code-quality]
-# Remove bandit because it doesn't respect config file when run in mllint
-linters = ["pylint", "mypy", "black", "isort"]
+# Remove mypy, pylint, bandit because it doesn't respect config file when run in mllint
+# pylint and mypy are run separately by nox
+linters = ["black", "isort"]
+
+[tool.mllint.testing]
+report = "tests-report.xml"
+
+[tool.mllint.testing.coverage]
+report = "coverage.xml"
 
 [tool.bandit]
 exclude_dirs = ["./.nox/*"]
 
 [tool.pylint.main]
 ignore = ["docs"]
+good-names = ["X_train, X_test, X, y"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
