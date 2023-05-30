@@ -7,7 +7,6 @@ license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/remla23-team18/model-training"
 repository = "https://github.com/remla23-team18/model-training"
-documentation = "https://model-training.readthedocs.io"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
 ]

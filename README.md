@@ -1,22 +1,11 @@
 # Model Training
 
-[![PyPI](https://img.shields.io/pypi/v/model-training.svg)][pypi_]
-[![Status](https://img.shields.io/pypi/status/model-training.svg)][status]
-[![Python Version](https://img.shields.io/pypi/pyversions/model-training)][python version]
-[![License](https://img.shields.io/pypi/l/model-training)][license]
-
-[![Read the documentation at https://model-training.readthedocs.io/](https://img.shields.io/readthedocs/model-training/latest.svg?label=Read%20the%20Docs)][read the docs]
-[![Tests](https://github.com/remla23-team18/model-training/workflows/Tests/badge.svg)][tests]
+[![Tests](https://github.com/remla23-team18/model-training/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/remla23-team18/model-training/actions/workflows/tests.yml)
 [![Codecov](https://codecov.io/gh/remla23-team18/model-training/branch/main/graph/badge.svg)][codecov]
 
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
 
-[pypi_]: https://pypi.org/project/model-training/
-[status]: https://pypi.org/project/model-training/
-[python version]: https://pypi.org/project/model-training
-[read the docs]: https://model-training.readthedocs.io/
-[tests]: https://github.com/remla23-team18/model-training/actions?workflow=Tests
 [codecov]: https://app.codecov.io/gh/remla23-team18/model-training
 [pre-commit]: https://github.com/pre-commit/pre-commit
 [black]: https://github.com/psf/black
@@ -27,15 +16,8 @@
 
 ## Requirements
 
-- TODO
-
-## Installation
-
-You can install _Model Training_ via [pip] from [PyPI]:
-
-```console
-$ pip install model-training
-```
+- python >= 3.10
+- poetry >= 1.5
 
 ## Usage
 
