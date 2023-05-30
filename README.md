@@ -10,18 +10,28 @@
 [pre-commit]: https://github.com/pre-commit/pre-commit
 [black]: https://github.com/psf/black
 
-## Features
-
-- TODO
-
 ## Requirements
 
 - python >= 3.10
 - poetry >= 1.5
 
+## Installation
+
+You can install the package locally for development using [poetry]:
+
+```console
+$ poetry install
+```
+
 ## Usage
 
-Please see the [Command-line Reference] for details.
+After installing the package, you can run the CLI using [poetry]:
+
+```console
+$ poetry run model-training --help
+```
+
+will print the usage information for the CLI.
 
 ## Contributing
 
@@ -52,4 +62,3 @@ This project was generated from [@cjolowicz]'s [Hypermodern Python Cookiecutter]
 
 [license]: https://github.com/remla23-team18/model-training/blob/main/LICENSE
 [contributor guide]: https://github.com/remla23-team18/model-training/blob/main/CONTRIBUTING.md
-[command-line reference]: https://model-training.readthedocs.io/en/latest/usage.html
