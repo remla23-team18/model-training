@@ -10,6 +10,7 @@ from sklearn.feature_extraction.text import CountVectorizer  # type: ignore
 from sklearn.model_selection import train_test_split  # type: ignore
 from sklearn.naive_bayes import GaussianNB  # type: ignore
 
+from .params import load_params
 from .preprocess import clean_review
 from .preprocess import setup_stopwords
 
@@ -58,6 +59,11 @@ logger = logging.getLogger(__name__)
     default=0.2,
     help="Size of the test set.",
 )
+@click.option(
+    "--params-path",
+    type=click.Path(path_type=Path, dir_okay=False, readable=True),
+    help="Path to the parameters file.",
+)
 def train_model(
     output_dir: Path,
     count_vectorizer_artifact_name: Path,
@@ -66,8 +72,11 @@ def train_model(
     preprocessed_dataset_path: Path | None,
     split_random_state: int,
     test_size: float,
+    params_path: Path | None,
 ) -> None:
     """Train the sentiment analysis model."""
+    if params_path is not None:
+        split_random_state, test_size = load_params(params_path)
     corpus: list[str] = []
     if preprocessed_dataset_path is None:
         logger.debug("Preprocessing the dataset...")
