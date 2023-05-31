@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 @click.option(
     "--dataset-path",
     default="a1_RestaurantReviews_HistoricDump.tsv",
-    type=click.Path(path_type=Path, exists=True, dir_okay=False, readable=True),
+    type=click.Path(path_type=Path, dir_okay=False, readable=True),
     help="Path to the (unprocessed) dataset.",
 )
 @click.option(
