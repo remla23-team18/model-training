@@ -84,7 +84,14 @@ def evaluate_model(
     classifier = joblib.load(model_dir_path / classifier_artifact_name)
 
     logger.debug("Loading the dataset...")
-    dataset = pd.read_csv(preprocessed_dataset_path, delimiter="\t", quoting=3)
+    dataset = pd.read_csv(
+        preprocessed_dataset_path,
+        delimiter="\t",
+        quoting=3,
+        dtype={"Review": str, "Liked": int},
+    )
+    dataset = dataset[["Review", "Liked"]]
+
     logger.debug("Splitting the dataset...")
     _, X_test, _, y_test = train_test_split(
         dataset["Review"],

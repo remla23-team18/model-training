@@ -11,8 +11,7 @@ from sklearn.model_selection import train_test_split  # type: ignore
 from sklearn.naive_bayes import GaussianNB  # type: ignore
 
 from .params import load_params
-from .preprocess import clean_review
-from .preprocess import setup_stopwords
+from .preprocess import make_preprocessed_dataset
 
 
 logger = logging.getLogger(__name__)
@@ -20,14 +19,10 @@ logger = logging.getLogger(__name__)
 
 def _create_corpus(dataset_path: Path) -> tuple[list[str], list[int]]:
     logger.debug("Preprocessing the dataset...")
-    dataset = pd.read_csv(dataset_path, delimiter="\t", quoting=3)
-    corpus = []
-    logger.debug("Cleaning and tokenizing reviews...")
-    all_stopwords = setup_stopwords()
-    for review_idx in range(0, dataset["Review"].size):
-        review = clean_review(dataset["Review"][review_idx], all_stopwords)
-        corpus.append(review)
-    return corpus, dataset["Liked"].values
+    dataset = make_preprocessed_dataset(dataset_path)
+    corpus = dataset["Review"].tolist()
+    labels = dataset["Liked"].tolist()
+    return corpus, labels
 
 
 def _load_existing_corpus(
@@ -35,12 +30,18 @@ def _load_existing_corpus(
 ) -> tuple[list[str], list[int]]:
     logger.debug("Loading the preprocessed dataset...")
     dataset = pd.read_csv(
-        preprocessed_dataset_path, delimiter="\t", quoting=3, keep_default_na=False
+        preprocessed_dataset_path,
+        delimiter="\t",
+        quoting=3,
+        keep_default_na=False,
+        dtype={"Liked": int, "Review": str},
     )
+    dataset = dataset[["Review", "Liked"]]
     corpus = dataset["Review"].tolist()
+    labels = dataset["Liked"].tolist()
     logger.debug("Corpus size: %d", len(corpus))
 
-    return corpus, dataset["Liked"].values
+    return corpus, labels
 
 
 @click.command(name="train")
