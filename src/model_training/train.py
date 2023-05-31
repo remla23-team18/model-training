@@ -33,15 +33,19 @@ logger = logging.getLogger(__name__)
     default="c2_Classifier_Sentiment_Model",
     help="Name of the classifier artifact.",
 )
+@click.option(
+    "--dataset-path",
+    default="a1_RestaurantReviews_HistoricDump.tsv",
+    help="Path to the dataset.",
+)
 def train_model(
     output_dir: str = "models",
     count_vectorizer_artifact_name: str = "c1_BoW_Sentiment_Model.pkl",
     classifier_artifact_name: str = "c2_Classifier_Sentiment_Model",
+    dataset_path: str = "a1_RestaurantReviews_HistoricDump.tsv",
 ) -> None:
     """Train the sentiment analysis model."""
-    dataset = pd.read_csv(
-        "a1_RestaurantReviews_HistoricDump.tsv", delimiter="\t", quoting=3
-    )
+    dataset = pd.read_csv(dataset_path, delimiter="\t", quoting=3)
 
     corpus = []
     logger.debug("Cleaning and tokenizing reviews...")
