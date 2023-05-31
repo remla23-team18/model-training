@@ -1,4 +1,6 @@
 """Test cases for the __main__ module."""
+from pathlib import Path
+
 import pytest
 from click.testing import CliRunner
 
@@ -26,7 +28,15 @@ def test_clean(runner: CliRunner) -> None:
     assert result.output == "Cleaned review: test\n"
 
 
-def test_train(runner: CliRunner) -> None:
+def test_train(runner: CliRunner, tmp_path: Path) -> None:
     """It exits with a status code of zero."""
-    result = runner.invoke(train.train_model)
+    result = runner.invoke(
+        train.train_model,
+        [
+            "--output-dir",
+            str(tmp_path / "models"),
+            "--dataset-path",
+            "tests/resources/restaurant_reviews_test.tsv",
+        ],
+    )
     assert result.exit_code == 0
