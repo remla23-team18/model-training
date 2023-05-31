@@ -39,6 +39,19 @@ will print the usage information for the CLI.
 After installing the package as mentioned above, you may also run `dvc repro` to let `dvc` automatically execute the stages of the pipeline for you.
 
 All of the stages of the pipeline are executed by running various subcommands of the CLI.
+## mllint
+
+To check `mllint` manually, first install with `poetry` as described above, then run:
+
+```console
+pytest --junitxml=tests-report.xml --cov-report=xml --cov=model_training
+```
+
+and finally, to check the report:
+
+```console
+mllint run
+```
 
 ### Experiment
 
