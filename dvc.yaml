@@ -15,5 +15,6 @@ stages:
     cmd: poetry run model-training evaluate
     deps:
       - models
-    outs:
-      - classification_report.json
+    metrics:
+      - classification_report.json:
+          cache: false

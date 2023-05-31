@@ -8,7 +8,7 @@ stages:
       size: 31609
     outs:
     - path: models
-      md5: 81e39fe4f06ec829296d89c1a70b6c4f.dir
+      md5: 50dd11eac0fa95de8b96e26bc46f5cbf.dir
       size: 86040
       nfiles: 2
   preprocess:
@@ -25,7 +25,7 @@ stages:
     cmd: poetry run model-training evaluate
     deps:
     - path: models
-      md5: 81e39fe4f06ec829296d89c1a70b6c4f.dir
+      md5: 50dd11eac0fa95de8b96e26bc46f5cbf.dir
       size: 86040
       nfiles: 2
     outs:
