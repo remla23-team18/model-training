@@ -5,7 +5,7 @@ from pathlib import Path
 
 import click
 import joblib  # type: ignore
-import pandas as pd
+import pandas as pd  # type: ignore
 from sklearn.metrics import classification_report  # type: ignore
 from sklearn.model_selection import train_test_split  # type: ignore
 
