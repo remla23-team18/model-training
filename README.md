@@ -76,7 +76,6 @@ $ dvc exp diff
 
 ```console
 $ poetry run pytest
-=======
 ```
 
 ## Contributing
