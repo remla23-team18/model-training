@@ -106,19 +106,6 @@ jobs:
           name: docs
           path: docs/_build
 
-      - name: Get mllint report
-        if: matrix.session == 'mllint'
-        id: get-mllint-report
-        run: |
-          echo "REPORT=${mllint run -f -o -}" >> $GITHUB_OUTPUT
-
-      - name: Comment mllint report
-        if: matrix.session == 'mllint'
-        uses: peter-evans/create-or-update-comment@v3
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.get-mllint-report.outputs.REPORT }}
-
   coverage:
     runs-on: ubuntu-latest
     needs: tests
