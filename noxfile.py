@@ -35,6 +35,8 @@ nox.options.sessions = (
     "typeguard",
     "xdoctest",
     "docs-build",
+    "pylint",
+    "mllint",
 )
 
 
