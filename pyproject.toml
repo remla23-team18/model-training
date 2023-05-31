@@ -101,6 +101,8 @@ exclude_dirs = ["./.nox/*"]
 [tool.pylint.main]
 ignore = ["docs"]
 good-names = ["X_train, X_test, X, y"]
+max-args = 10
+max-locals = 20
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
