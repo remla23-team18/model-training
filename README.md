@@ -16,7 +16,7 @@
 
 ## Installation
 
-You can install the package locally for development using [poetry]:
+You can install the package locally for development using `poetry`:
 
 ```console
 $ poetry install
@@ -24,7 +24,7 @@ $ poetry install
 
 ## Usage
 
-After installing the package, you can run the CLI using [poetry]:
+After installing the package, you can run the CLI using `poetry`:
 
 ```console
 $ poetry run model-training --help
