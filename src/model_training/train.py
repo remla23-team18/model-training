@@ -18,14 +18,29 @@ from .preprocess import setup_stopwords
 logger = logging.getLogger(__name__)
 
 
-def _create_corpus(dataset: pd.DataFrame) -> list[str]:
+def _create_corpus(dataset_path: Path) -> tuple[list[str], list[int]]:
+    logger.debug("Preprocessing the dataset...")
+    dataset = pd.read_csv(dataset_path, delimiter="\t", quoting=3)
     corpus = []
     logger.debug("Cleaning and tokenizing reviews...")
     all_stopwords = setup_stopwords()
     for review_idx in range(0, dataset["Review"].size):
         review = clean_review(dataset["Review"][review_idx], all_stopwords)
         corpus.append(review)
-    return corpus
+    return corpus, dataset["Liked"].values
+
+
+def _load_existing_corpus(
+    preprocessed_dataset_path: Path,
+) -> tuple[list[str], list[int]]:
+    logger.debug("Loading the preprocessed dataset...")
+    dataset = pd.read_csv(
+        preprocessed_dataset_path, delimiter="\t", quoting=3, keep_default_na=False
+    )
+    corpus = dataset["Review"].tolist()
+    logger.debug("Corpus size: %d", len(corpus))
+
+    return corpus, dataset["Liked"].values
 
 
 @click.command(name="train")
@@ -88,24 +103,16 @@ def train_model(
     if params_path is not None:
         split_random_state, test_size = load_params(params_path)
     corpus: list[str] = []
+    y: list[int] = []
     if preprocessed_dataset_path is None:
-        logger.debug("Preprocessing the dataset...")
-        dataset = pd.read_csv(dataset_path, delimiter="\t", quoting=3)
-
-        corpus = _create_corpus(dataset)
+        corpus, y = _create_corpus(dataset_path)
     else:
-        logger.debug("Loading the preprocessed dataset...")
-        dataset = pd.read_csv(
-            preprocessed_dataset_path, delimiter="\t", quoting=3, keep_default_na=False
-        )
-        corpus = dataset["Review"].tolist()
-        logger.debug("Corpus size: %d", len(corpus))
+        corpus, y = _load_existing_corpus(preprocessed_dataset_path)
 
     logger.debug("Creating the Bag of Words model...")
     count_vectorizer = CountVectorizer(max_features=1420)
 
     X = count_vectorizer.fit_transform(corpus).toarray()
-    y = dataset.iloc[:, -1].values
 
     logger.info("Splitting the dataset into the Training set and Test set...")
     X_train, _, y_train, _ = train_test_split(

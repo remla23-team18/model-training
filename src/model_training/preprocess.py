@@ -87,8 +87,8 @@ def preprocess_dataset(
     corpus = []
     logger.debug("Cleaning and tokenizing reviews...")
     all_stopwords = setup_stopwords()
-    for i in range(0, dataset["Review"].size):
-        review = clean_review(dataset["Review"][i], all_stopwords)
+    for review_idx in range(0, dataset["Review"].size):
+        review = clean_review(dataset["Review"][review_idx], all_stopwords)
         corpus.append(review)
 
     dataset["Review"] = corpus
