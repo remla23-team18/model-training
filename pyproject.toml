@@ -102,7 +102,7 @@ exclude_dirs = ["./.nox/*"]
 
 [tool.pylint.main]
 ignore = ["docs"]
-disable = ["duplicate-code"]
+disable = ["duplicate-code", "unspecified-encoding"]
 good-names = ["X_train, X_test, X, y"]
 max-args = 10
 max-locals = 20
