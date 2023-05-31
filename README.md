@@ -40,6 +40,24 @@ After installing the package as mentioned above, you may also run `dvc repro` to
 
 All of the stages of the pipeline are executed by running various subcommands of the CLI.
 
+### Experiment
+
+The performance of the model is currently reported in the `classification_report.json` file in the root directory.
+
+If you want to run an experiment and observe the results, then you can run the following command:
+
+```console
+$ dvc exp run --set-param split_random_state=1
+```
+
+This will run the experiment with a fixed random state for the train-test split.
+
+You can then compare the results of this experiment with the results of other experiments by running:
+
+```console
+$ dvc exp diff
+```
+
 ## Contributing
 
 Contributions are very welcome.
