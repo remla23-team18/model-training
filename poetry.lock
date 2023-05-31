@@ -2541,20 +2541,6 @@ test = ["hypothesis (>=6.34.2)", "pytest (>=7.0.0)", "pytest-asyncio (>=0.17.0)"
 xml = ["lxml (>=4.6.3)"]
 
 [[package]]
-name = "pandas-stubs"
-version = "2.0.1.230501"
-description = "Type annotations for pandas"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "pandas_stubs-2.0.1.230501-py3-none-any.whl", hash = "sha256:7ffc6528290df44881d1d78b7239161ba203e4b6570b71949fc4a4e5eabca8a5"},
-    {file = "pandas_stubs-2.0.1.230501.tar.gz", hash = "sha256:2faf2c08ecfd8f5b82823279e06818d92eb642079e73d93921779bad69bd4cb0"},
-]
-
-[package.dependencies]
-types-pytz = ">=2022.1.1"
-
-[[package]]
 name = "pathspec"
 version = "0.11.1"
 description = "Utility library for gitignore style pattern matching of file paths."
@@ -3916,17 +3902,6 @@ doc = ["packaging", "sphinx-autodoc-typehints (>=1.2.0)", "sphinx-rtd-theme"]
 test = ["mypy (>=1.2.0)", "pytest (>=7)"]
 
 [[package]]
-name = "types-pytz"
-version = "2023.3.0.0"
-description = "Typing stubs for pytz"
-optional = false
-python-versions = "*"
-files = [
-    {file = "types-pytz-2023.3.0.0.tar.gz", hash = "sha256:ecdc70d543aaf3616a7e48631543a884f74205f284cefd6649ddf44c6a820aac"},
-    {file = "types_pytz-2023.3.0.0-py3-none-any.whl", hash = "sha256:4fc2a7fbbc315f0b6630e0b899fd6c743705abe1094d007b0e612d10da15e0f3"},
-]
-
-[[package]]
 name = "typing-extensions"
 version = "4.6.2"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -4225,4 +4200,4 @@ test = ["zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.10.6"
-content-hash = "099db511de1f9a4427d52bf48f85878c6bc5faf875166a80a433124f201d4b59"
+content-hash = "2aa5332ec181ae10de184cc09dc0a9ad15a7c1081c5964817546b89a22e05eed"

@@ -5,7 +5,7 @@ from pathlib import Path
 
 import click
 import nltk  # type: ignore
-import pandas as pd
+import pandas as pd  # type: ignore
 from click import echo
 from nltk.corpus import stopwords  # type: ignore
 from nltk.stem.porter import PorterStemmer  # type: ignore
