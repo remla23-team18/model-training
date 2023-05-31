@@ -72,6 +72,13 @@ You can then compare the results of this experiment with the results of other ex
 $ dvc exp diff
 ```
 
+### Testing
+
+```console
+$ poetry run pytest
+=======
+```
+
 ## Contributing
 
 Contributions are very welcome.
