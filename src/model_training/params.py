@@ -2,7 +2,7 @@
 import logging
 from pathlib import Path
 
-import yaml
+import yaml  # type: ignore
 
 
 logger = logging.getLogger(__name__)
