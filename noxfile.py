@@ -243,7 +243,7 @@ def pylint(session: Session) -> None:
     """Lint using pylint."""
     requirements = session.poetry.export_requirements()
     args = session.posargs or ["src", "tests"]
-    session.run("pip", "install", "-r", requirements)
+    session.run("pip", "install", "-r", str(requirements))
     session.run("pylint", *args)
 
 
@@ -252,7 +252,7 @@ def mllint(session: Session) -> None:
     """Generate report mllint."""
     requirements = session.poetry.export_requirements()
     session.poetry.installroot()
-    session.run("pip", "install", "-r", requirements)
+    session.run("pip", "install", "-r", str(requirements))
     session.run(
         "pytest",
         "--junitxml=tests-report.xml",
