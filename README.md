@@ -40,6 +40,12 @@ After installing the package as mentioned above, you may also run `dvc repro` to
 
 All of the stages of the pipeline are executed by running various subcommands of the CLI.
 
+### Testing
+
+```console
+$ poetry run pytest
+```
+
 ## Contributing
 
 Contributions are very welcome.
