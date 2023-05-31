@@ -1,7 +1,19 @@
 stages:
   train:
-    cmd: poetry run model-training train
+    cmd: poetry run model-training train --preprocessed-dataset-path a2_RestaurantReviews_Preprocessed.tsv
+    deps:
+      - a2_RestaurantReviews_Preprocessed.tsv
+    outs:
+      - models
+  preprocess:
+    cmd: poetry run model-training preprocess-dataset
     deps:
       - a1_RestaurantReviews_HistoricDump.tsv
     outs:
+      - a2_RestaurantReviews_Preprocessed.tsv
+  evaluate:
+    cmd: poetry run model-training evaluate
+    deps:
       - models
+    outs:
+      - classification_report.json

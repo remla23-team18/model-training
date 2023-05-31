@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "model-training"
-version = "0.1.0"
+version = "0.2.0"
 description = "Model Training"
 authors = ["remla23-team18"]
 license = "MIT"

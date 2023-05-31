@@ -1,9 +1,11 @@
 """Reusable preprocessing script for cleaning restaurant review text data."""
 import logging
 import re
+from pathlib import Path
 
 import click
 import nltk  # type: ignore
+import pandas as pd
 from click import echo
 from nltk.corpus import stopwords  # type: ignore
 from nltk.stem.porter import PorterStemmer  # type: ignore
@@ -59,3 +61,33 @@ def clean_cli(review: str) -> None:
     review = clean_review(review, stopwords)
 
     echo(f"Cleaned review: {review}")
+
+
+@click.command(name="preprocess-dataset")
+@click.option(
+    "--dataset-path",
+    default="a1_RestaurantReviews_HistoricDump.tsv",
+    type=click.Path(path_type=Path, exists=True, dir_okay=False),
+    help="Path to the dataset.",
+)
+@click.option(
+    "--output-path",
+    default="a2_RestaurantReviews_Preprocessed.tsv",
+    type=click.Path(path_type=Path, dir_okay=False),
+    help="Path to the preprocessed dataset.",
+)
+def preprocess_dataset(
+    dataset_path: Path,
+    output_path: Path,
+) -> None:
+    """Preprocess the dataset and save it to `output_path`."""
+    dataset = pd.read_csv(dataset_path, delimiter="\t", quoting=3)
+    corpus = []
+    logger.debug("Cleaning and tokenizing reviews...")
+    all_stopwords = setup_stopwords()
+    for i in range(0, dataset["Review"].size):
+        review = clean_review(dataset["Review"][i], all_stopwords)
+        corpus.append(review)
+
+    dataset["Review"] = corpus
+    dataset.to_csv(output_path, sep="\t", index=False, quoting=3)
