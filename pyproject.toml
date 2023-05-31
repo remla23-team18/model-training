@@ -15,7 +15,9 @@ classifiers = [
 Changelog = "https://github.com/remla23-team18/model-training/releases"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+# dslinter is constraining the mypy version (>=0.981) to exclude the fix
+# mentioned in https://github.com/python/mypy/issues/13627#issuecomment-1245613842
+python = "3.10.6"
 click = ">=8.0.1"
 numpy = "^1.24.3"
 pandas = "^2.0.1"
@@ -30,7 +32,7 @@ model-training = "model_training.__main__:cli"
 
 [tool.poetry.group.dev.dependencies]
 mllint = "^0.12.2"
-pylint = "^2.17.4"
+pylint = "<2.13.0"
 bandit = "^1.7.5"
 Pygments = ">=2.10.0"
 black = ">=21.10b0"
@@ -58,6 +60,7 @@ xdoctest = {extras = ["colors"], version = ">=0.15.10"}
 myst-parser = {version = ">=0.16.1"}
 dvc = "^2.58.1"
 pytest-cov = "^4.1.0"
+dslinter = "^2.0.9"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]

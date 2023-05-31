@@ -5,7 +5,7 @@ import click
 
 from .evaluate import evaluate_model
 from .preprocess import clean_cli
-from .preprocess import preprocess_dataset
+from .preprocess import preprocess_dataset_cli
 from .train import train_model
 
 
@@ -20,9 +20,11 @@ def cli() -> None:
 
 cli.add_command(train_model)
 cli.add_command(clean_cli)
-cli.add_command(preprocess_dataset)
+cli.add_command(preprocess_dataset_cli)
 cli.add_command(evaluate_model)
 
 
 if __name__ == "__main__":
+    # pylint: disable=unexpected-keyword-arg
     cli(prog_name="model-training")  # pragma: no cover
+    # pylint: enable=unexpected-keyword-arg

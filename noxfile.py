@@ -242,7 +242,7 @@ def docs(session: Session) -> None:
 def pylint(session: Session) -> None:
     """Lint using pylint."""
     requirements = session.poetry.export_requirements()
-    args = session.posargs or ["src", "tests"]
+    args = session.posargs or ["src", "tests", "--load-plugins", "dslinter"]
     session.run("pip", "install", "-r", str(requirements))
     session.run("pylint", *args)
 

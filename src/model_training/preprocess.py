@@ -78,12 +78,21 @@ def clean_cli(review: str) -> None:
     type=click.Path(path_type=Path, dir_okay=False),
     help="Path to the preprocessed dataset.",
 )
-def preprocess_dataset(
+def preprocess_dataset_cli(
     dataset_path: Path,
     output_path: Path,
 ) -> None:
     """Preprocess the dataset and save it to `output_path`."""
-    dataset = pd.read_csv(dataset_path, delimiter="\t", quoting=3)
+    dataset = make_preprocessed_dataset(dataset_path)
+    dataset.to_csv(output_path, sep="\t", index=False, quoting=3)
+
+
+def make_preprocessed_dataset(dataset_path: Path) -> pd.DataFrame:
+    """Preprocess the dataset and return it."""
+    dataset = pd.read_csv(
+        dataset_path, delimiter="\t", quoting=3, dtype={"Liked": int, "Review": str}
+    )
+    dataset = dataset[["Review", "Liked"]]
     corpus = []
     logger.debug("Cleaning and tokenizing reviews...")
     all_stopwords = setup_stopwords()
@@ -92,4 +101,4 @@ def preprocess_dataset(
         corpus.append(review)
 
     dataset["Review"] = corpus
-    dataset.to_csv(output_path, sep="\t", index=False, quoting=3)
+    return dataset
