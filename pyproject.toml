@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "model-training"
-version = "0.2.0"
+version = "0.3.0"
 description = "Model Training"
 authors = ["remla23-team18"]
 license = "MIT"
@@ -15,14 +15,15 @@ classifiers = [
 Changelog = "https://github.com/remla23-team18/model-training/releases"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+# dslinter is constraining the mypy version (>=0.981) to exclude the fix
+# mentioned in https://github.com/python/mypy/issues/13627#issuecomment-1245613842
+python = "3.10.6"
 click = ">=8.0.1"
 numpy = "^1.24.3"
 pandas = "^2.0.1"
 nltk = "^3.8.1"
 joblib = "^1.2.0"
 scikit-learn = "^1.2.2"
-pandas-stubs = "^2.0.1.230501"
 dvc-gdrive = "^2.19.2"
 
 [tool.poetry.scripts]
@@ -30,7 +31,7 @@ model-training = "model_training.__main__:cli"
 
 [tool.poetry.group.dev.dependencies]
 mllint = "^0.12.2"
-pylint = "^2.17.4"
+pylint = "<2.13.0"
 bandit = "^1.7.5"
 Pygments = ">=2.10.0"
 black = ">=21.10b0"
@@ -57,6 +58,8 @@ typeguard = ">=2.13.3"
 xdoctest = {extras = ["colors"], version = ">=0.15.10"}
 myst-parser = {version = ">=0.16.1"}
 dvc = "^2.58.1"
+pytest-cov = "^4.1.0"
+dslinter = "^2.0.9"
 
 [tool.coverage.paths]
 source = ["src", "*/site-packages"]
@@ -84,14 +87,25 @@ show_error_codes = true
 show_error_context = true
 
 [tool.mllint.code-quality]
-# Remove bandit because it doesn't respect config file when run in mllint
-linters = ["pylint", "mypy", "black", "isort"]
+# Remove mypy, pylint, bandit because it doesn't respect config file when run in mllint
+# pylint and mypy are run separately by nox
+linters = ["black", "isort"]
+
+[tool.mllint.testing]
+report = "tests-report.xml"
+
+[tool.mllint.testing.coverage]
+report = "coverage.xml"
 
 [tool.bandit]
 exclude_dirs = ["./.nox/*"]
 
 [tool.pylint.main]
 ignore = ["docs"]
+disable = ["duplicate-code", "unspecified-encoding"]
+good-names = ["X_train, X_test, X, y"]
+max-args = 10
+max-locals = 20
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

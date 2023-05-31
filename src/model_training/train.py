@@ -5,16 +5,43 @@ from pathlib import Path
 
 import click
 import joblib  # type: ignore
-import pandas as pd
+import pandas as pd  # type: ignore
 from sklearn.feature_extraction.text import CountVectorizer  # type: ignore
 from sklearn.model_selection import train_test_split  # type: ignore
 from sklearn.naive_bayes import GaussianNB  # type: ignore
 
-from .preprocess import clean_review
-from .preprocess import setup_stopwords
+from .params import load_params
+from .preprocess import make_preprocessed_dataset
 
 
 logger = logging.getLogger(__name__)
+
+
+def _create_corpus(dataset_path: Path) -> tuple[list[str], list[int]]:
+    logger.debug("Preprocessing the dataset...")
+    dataset = make_preprocessed_dataset(dataset_path)
+    corpus = dataset["Review"].tolist()
+    labels = dataset["Liked"].tolist()
+    return corpus, labels
+
+
+def _load_existing_corpus(
+    preprocessed_dataset_path: Path,
+) -> tuple[list[str], list[int]]:
+    logger.debug("Loading the preprocessed dataset...")
+    dataset = pd.read_csv(
+        preprocessed_dataset_path,
+        delimiter="\t",
+        quoting=3,
+        keep_default_na=False,
+        dtype={"Liked": int, "Review": str},
+    )
+    dataset = dataset[["Review", "Liked"]]
+    corpus = dataset["Review"].tolist()
+    labels = dataset["Liked"].tolist()
+    logger.debug("Corpus size: %d", len(corpus))
+
+    return corpus, labels
 
 
 @click.command(name="train")
@@ -58,6 +85,11 @@ logger = logging.getLogger(__name__)
     default=0.2,
     help="Size of the test set.",
 )
+@click.option(
+    "--params-path",
+    type=click.Path(path_type=Path, dir_okay=False, readable=True),
+    help="Path to the parameters file.",
+)
 def train_model(
     output_dir: Path,
     count_vectorizer_artifact_name: Path,
@@ -66,30 +98,22 @@ def train_model(
     preprocessed_dataset_path: Path | None,
     split_random_state: int,
     test_size: float,
+    params_path: Path | None,
 ) -> None:
     """Train the sentiment analysis model."""
+    if params_path is not None:
+        split_random_state, test_size = load_params(params_path)
     corpus: list[str] = []
+    y: list[int] = []
     if preprocessed_dataset_path is None:
-        logger.debug("Preprocessing the dataset...")
-        dataset = pd.read_csv(dataset_path, delimiter="\t", quoting=3)
-
-        logger.debug("Cleaning and tokenizing reviews...")
-        all_stopwords = setup_stopwords()
-        for i in range(0, dataset["Review"].size):
-            review = clean_review(dataset["Review"][i], all_stopwords)
-            corpus.append(review)
+        corpus, y = _create_corpus(dataset_path)
     else:
-        logger.debug("Loading the preprocessed dataset...")
-        dataset = pd.read_csv(
-            preprocessed_dataset_path, delimiter="\t", quoting=3, keep_default_na=False
-        )
-        corpus = dataset["Review"].tolist()
-        logger.debug("Corpus size: %d", len(corpus))
+        corpus, y = _load_existing_corpus(preprocessed_dataset_path)
 
     logger.debug("Creating the Bag of Words model...")
-    cv = CountVectorizer(max_features=1420)
-    X = cv.fit_transform(corpus).toarray()
-    y = dataset.iloc[:, -1].values
+    count_vectorizer = CountVectorizer(max_features=1420)
+
+    X = count_vectorizer.fit_transform(corpus).toarray()
 
     logger.info("Splitting the dataset into the Training set and Test set...")
     X_train, _, y_train, _ = train_test_split(
@@ -104,7 +128,8 @@ def train_model(
     output_dir_path.mkdir(parents=True, exist_ok=True)
 
     logger.debug("Saving the count vectorizer to later use in prediction")
-    pickle.dump(cv, open(output_dir_path / count_vectorizer_artifact_name, "wb"))
+    with open(output_dir_path / count_vectorizer_artifact_name, "wb") as output_file:
+        pickle.dump(count_vectorizer, output_file)
 
     logger.debug("Saving the classifier to later use in prediction")
     joblib.dump(classifier, output_dir_path / classifier_artifact_name)

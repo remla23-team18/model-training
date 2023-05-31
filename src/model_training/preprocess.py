@@ -5,7 +5,7 @@ from pathlib import Path
 
 import click
 import nltk  # type: ignore
-import pandas as pd
+import pandas as pd  # type: ignore
 from click import echo
 from nltk.corpus import stopwords  # type: ignore
 from nltk.stem.porter import PorterStemmer  # type: ignore
@@ -39,17 +39,19 @@ def clean_review(review: str, all_stopwords: list[str]) -> str:
     review : str
         Cleaned review text.
     """
-    logger.debug(f"Cleaning {review}...")
-    ps = PorterStemmer()
+    logger.debug("Cleaning %s...", review)
+    porter_stemmer = PorterStemmer()
 
     review = re.sub("[^a-zA-Z]", " ", review)
     review = review.lower()
     review_words = review.split()
     review_words_striped = [
-        ps.stem(word) for word in review_words if word not in set(all_stopwords)
+        porter_stemmer.stem(word)
+        for word in review_words
+        if word not in set(all_stopwords)
     ]
     review = " ".join(review_words_striped)
-    logger.debug(f"Cleaned review: {review}")
+    logger.debug("Cleaned review: %s", review)
     return review
 
 
@@ -57,8 +59,8 @@ def clean_review(review: str, all_stopwords: list[str]) -> str:
 @click.argument("review")
 def clean_cli(review: str) -> None:
     """Clean a review."""
-    stopwords = setup_stopwords()
-    review = clean_review(review, stopwords)
+    all_stopwords = setup_stopwords()
+    review = clean_review(review, all_stopwords)
 
     echo(f"Cleaned review: {review}")
 
@@ -76,18 +78,27 @@ def clean_cli(review: str) -> None:
     type=click.Path(path_type=Path, dir_okay=False),
     help="Path to the preprocessed dataset.",
 )
-def preprocess_dataset(
+def preprocess_dataset_cli(
     dataset_path: Path,
     output_path: Path,
 ) -> None:
     """Preprocess the dataset and save it to `output_path`."""
-    dataset = pd.read_csv(dataset_path, delimiter="\t", quoting=3)
+    dataset = make_preprocessed_dataset(dataset_path)
+    dataset.to_csv(output_path, sep="\t", index=False, quoting=3)
+
+
+def make_preprocessed_dataset(dataset_path: Path) -> pd.DataFrame:
+    """Preprocess the dataset and return it."""
+    dataset = pd.read_csv(
+        dataset_path, delimiter="\t", quoting=3, dtype={"Liked": int, "Review": str}
+    )
+    dataset = dataset[["Review", "Liked"]]
     corpus = []
     logger.debug("Cleaning and tokenizing reviews...")
     all_stopwords = setup_stopwords()
-    for i in range(0, dataset["Review"].size):
-        review = clean_review(dataset["Review"][i], all_stopwords)
+    for review_idx in range(0, dataset["Review"].size):
+        review = clean_review(dataset["Review"][review_idx], all_stopwords)
         corpus.append(review)
 
     dataset["Review"] = corpus
-    dataset.to_csv(output_path, sep="\t", index=False, quoting=3)
+    return dataset

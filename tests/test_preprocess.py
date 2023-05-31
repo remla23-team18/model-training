@@ -4,7 +4,7 @@ from pathlib import Path
 from click.testing import CliRunner
 
 from model_training import preprocess
-from model_training.preprocess import preprocess_dataset
+from model_training.preprocess import preprocess_dataset_cli
 
 
 def test_clean(runner: CliRunner) -> None:
@@ -19,7 +19,7 @@ def test_preprocess_entire_dataset(runner: CliRunner, tmp_path: Path) -> None:
     # Create a dummy dataset
     (tmp_path / "test.tsv").write_text("Review\tLiked\nThis is a test\t1\n")
     result = runner.invoke(
-        preprocess_dataset,
+        preprocess_dataset_cli,
         [
             "--dataset-path",
             str(tmp_path / "test.tsv"),
@@ -27,7 +27,6 @@ def test_preprocess_entire_dataset(runner: CliRunner, tmp_path: Path) -> None:
             str(tmp_path / "test_preprocessed.tsv"),
         ],
     )
-    print(result.exception)
     assert result.exit_code == 0
     assert (tmp_path / "test_preprocessed.tsv").exists()
     assert (

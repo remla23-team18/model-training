@@ -2,13 +2,18 @@ schema: '2.0'
 stages:
   train:
     cmd: poetry run model-training train --preprocessed-dataset-path a2_RestaurantReviews_Preprocessed.tsv
+      --params-path params.yaml
     deps:
     - path: a2_RestaurantReviews_Preprocessed.tsv
       md5: 5fb43a68c3ec5b122224b5fcf73aaada
       size: 31609
+    params:
+      params.yaml:
+        split_random_state: 0
+        test_size: 0.2
     outs:
     - path: models
-      md5: 50dd11eac0fa95de8b96e26bc46f5cbf.dir
+      md5: 923a123b0248f2d411f8fe1f5d3ca066.dir
       size: 86040
       nfiles: 2
   preprocess:
@@ -22,12 +27,16 @@ stages:
       md5: 5fb43a68c3ec5b122224b5fcf73aaada
       size: 31609
   evaluate:
-    cmd: poetry run model-training evaluate
+    cmd: poetry run model-training evaluate --params-path params.yaml
     deps:
     - path: models
-      md5: 50dd11eac0fa95de8b96e26bc46f5cbf.dir
+      md5: 923a123b0248f2d411f8fe1f5d3ca066.dir
       size: 86040
       nfiles: 2
+    params:
+      params.yaml:
+        split_random_state: 0
+        test_size: 0.2
     outs:
     - path: classification_report.json
       md5: e527c39e7bcdc6e91b4ed4df64eec7ad

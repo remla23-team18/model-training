@@ -5,9 +5,11 @@ from pathlib import Path
 
 import click
 import joblib  # type: ignore
-import pandas as pd
+import pandas as pd  # type: ignore
 from sklearn.metrics import classification_report  # type: ignore
 from sklearn.model_selection import train_test_split  # type: ignore
+
+from .params import load_params
 
 
 logger = logging.getLogger(__name__)
@@ -56,6 +58,11 @@ logger = logging.getLogger(__name__)
     type=click.Path(path_type=Path, dir_okay=False),
     help="Path to the classification report.",
 )
+@click.option(
+    "--params-path",
+    type=click.Path(path_type=Path, dir_okay=False, readable=True),
+    help="Path to the parameters file.",
+)
 def evaluate_model(
     model_dir: Path,
     count_vectorizer_artifact_name: Path,
@@ -64,8 +71,12 @@ def evaluate_model(
     split_random_state: int,
     test_size: float,
     report_path: Path,
+    params_path: Path | None,
 ) -> None:
     """Evaluate the sentiment analysis model."""
+    if params_path is not None:
+        split_random_state, test_size = load_params(params_path)
+
     logger.info("Evaluating the model...")
     logger.debug("Loading the model...")
     model_dir_path = Path(model_dir)
@@ -73,7 +84,14 @@ def evaluate_model(
     classifier = joblib.load(model_dir_path / classifier_artifact_name)
 
     logger.debug("Loading the dataset...")
-    dataset = pd.read_csv(preprocessed_dataset_path, delimiter="\t", quoting=3)
+    dataset = pd.read_csv(
+        preprocessed_dataset_path,
+        delimiter="\t",
+        quoting=3,
+        dtype={"Review": str, "Liked": int},
+    )
+    dataset = dataset[["Review", "Liked"]]
+
     logger.debug("Splitting the dataset...")
     _, X_test, _, y_test = train_test_split(
         dataset["Review"],

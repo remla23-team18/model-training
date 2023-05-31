@@ -35,6 +35,8 @@ nox.options.sessions = (
     "typeguard",
     "xdoctest",
     "docs-build",
+    "pylint",
+    "mllint",
 )
 
 
@@ -236,3 +238,27 @@ def docs(session: Session) -> None:
         shutil.rmtree(build_dir)
 
     session.run("sphinx-autobuild", *args)
+
+
+@session(python=python_versions[0])
+def pylint(session: Session) -> None:
+    """Lint using pylint."""
+    requirements = session.poetry.export_requirements()
+    args = session.posargs or ["src", "tests", "--load-plugins", "dslinter"]
+    session.run("pip", "install", "-r", str(requirements))
+    session.run("pylint", *args)
+
+
+@session(python=python_versions[0])
+def mllint(session: Session) -> None:
+    """Generate report mllint."""
+    requirements = session.poetry.export_requirements()
+    session.poetry.installroot()
+    session.run("pip", "install", "-r", str(requirements))
+    session.run(
+        "pytest",
+        "--junitxml=tests-report.xml",
+        "--cov-report=xml",
+        "--cov=model_training",
+    )
+    session.run("mllint", "run", "-f", "-o", "mllint-report.md")
