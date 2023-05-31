@@ -2,7 +2,6 @@
 
 [![Tests](https://github.com/remla23-team18/model-training/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/remla23-team18/model-training/actions/workflows/tests.yml)
 [![Codecov](https://codecov.io/gh/remla23-team18/model-training/branch/main/graph/badge.svg)][codecov]
-
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
 [![Black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
 
