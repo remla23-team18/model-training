@@ -1,10 +1,13 @@
 stages:
   train:
-    cmd: poetry run model-training train --preprocessed-dataset-path a2_RestaurantReviews_Preprocessed.tsv
+    cmd: poetry run model-training train --preprocessed-dataset-path a2_RestaurantReviews_Preprocessed.tsv --params-path params.yaml
     deps:
       - a2_RestaurantReviews_Preprocessed.tsv
     outs:
       - models
+    params:
+      - test_size
+      - split_random_state
   preprocess:
     cmd: poetry run model-training preprocess-dataset
     deps:
@@ -12,9 +15,12 @@ stages:
     outs:
       - a2_RestaurantReviews_Preprocessed.tsv
   evaluate:
-    cmd: poetry run model-training evaluate
+    cmd: poetry run model-training evaluate --params-path params.yaml
     deps:
       - models
     metrics:
       - classification_report.json:
           cache: false
+    params:
+      - test_size
+      - split_random_state

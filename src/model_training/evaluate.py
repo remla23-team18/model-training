@@ -9,6 +9,8 @@ import pandas as pd
 from sklearn.metrics import classification_report  # type: ignore
 from sklearn.model_selection import train_test_split  # type: ignore
 
+from .params import load_params
+
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +58,11 @@ logger = logging.getLogger(__name__)
     type=click.Path(path_type=Path, dir_okay=False),
     help="Path to the classification report.",
 )
+@click.option(
+    "--params-path",
+    type=click.Path(path_type=Path, dir_okay=False, readable=True),
+    help="Path to the parameters file.",
+)
 def evaluate_model(
     model_dir: Path,
     count_vectorizer_artifact_name: Path,
@@ -64,8 +71,12 @@ def evaluate_model(
     split_random_state: int,
     test_size: float,
     report_path: Path,
+    params_path: Path | None,
 ) -> None:
     """Evaluate the sentiment analysis model."""
+    if params_path is not None:
+        split_random_state, test_size = load_params(params_path)
+
     logger.info("Evaluating the model...")
     logger.debug("Loading the model...")
     model_dir_path = Path(model_dir)
