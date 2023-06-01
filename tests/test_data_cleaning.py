@@ -33,7 +33,7 @@ def train(runner: CliRunner, path: Path, random_state: int = 0):
         ],
     )
 
-def evaluate(runner: CliRunner, path: Path, random_state: int = 0) -> None:
+def evaluate(runner: CliRunner, path: Path, random_state: int = 0,preprocessed_dataset_path ="tests/resources/a2_RestaurantReviews_Preprocessed.tsv") -> None:
     count_vectorizer_artifact_name = "cv.pkl"
     classifier_artifact_name = "clf"
     models_path = path / "models"
@@ -47,7 +47,7 @@ def evaluate(runner: CliRunner, path: Path, random_state: int = 0) -> None:
             "--classifier-artifact-name",
             classifier_artifact_name,
             "--preprocessed-dataset-path",
-            "tests/resources/a2_RestaurantReviews_Preprocessed.tsv",
+            preprocessed_dataset_path,
             "--split-random-state",
             random_state,
             "--test-size",
@@ -79,3 +79,18 @@ def test_nondeterminism_robustness(runner: CliRunner,trained_model_path, tmp_pat
             json_data = json.load(file)
         new_score = json_data["accuracy"]
         assert abs(original_score - new_score) <=0.20
+
+def test_data_slice(runner: CliRunner,trained_model_path, tmp_path_factory):
+    evaluate(runner,trained_model_path) # creates classification_report.json for original model
+    original_score_path=str(trained_model_path / "classification_report.json")
+    with open(original_score_path, "r") as file:
+        json_data = json.load(file)
+    original_score = json_data["accuracy"]
+    tmp_path= tmp_path_factory.mktemp("dir_slice")
+    train(runner, tmp_path)
+    evaluate(runner,tmp_path,preprocessed_dataset_path="tests/resources/restaurant_reviews_test_preprocessed.tsv")
+    tmp_score_path=str(tmp_path / "classification_report.json")
+    with open(tmp_score_path, "r") as file:
+        json_data = json.load(file)
+    new_score = json_data["accuracy"]
+    assert abs(original_score - new_score) <=0.30
