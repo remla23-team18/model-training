@@ -4,11 +4,10 @@ import pytest
 from pathlib import Path
 import json
 from click.testing import CliRunner
-
 from model_training.evaluate import evaluate_model
 from model_training.train import train_model
 
-def train(runner: CliRunner, path: Path, random_state: int = 0):
+def train(runner: CliRunner, path: Path, random_state: int = 0,preprocessed_dataset_path ="tests/resources/a2_RestaurantReviews_Preprocessed.tsv"):
     count_vectorizer_artifact_name = "cv.pkl"
     classifier_artifact_name = "clf"
 
@@ -25,7 +24,7 @@ def train(runner: CliRunner, path: Path, random_state: int = 0):
             "--classifier-artifact-name",
             classifier_artifact_name,
             "--preprocessed-dataset-path",
-            "tests/resources/a2_RestaurantReviews_Preprocessed.tsv",
+            preprocessed_dataset_path,
             "--split-random-state",
             random_state,
             "--test-size",
@@ -33,7 +32,7 @@ def train(runner: CliRunner, path: Path, random_state: int = 0):
         ],
     )
 
-def evaluate(runner: CliRunner, path: Path, random_state: int = 0,preprocessed_dataset_path ="tests/resources/a2_RestaurantReviews_Preprocessed.tsv") -> None:
+def evaluate(runner: CliRunner, path: Path, random_state: int = 0,preprocessed_dataset_path ="tests/resources/a2_RestaurantReviews_Preprocessed.tsv"):
     count_vectorizer_artifact_name = "cv.pkl"
     classifier_artifact_name = "clf"
     models_path = path / "models"
@@ -63,7 +62,7 @@ def trained_model_path(runner: CliRunner, tmp_path: Path):
     train(runner, tmp_path)
     return tmp_path
 
-
+# Test for non-determinism robustness.
 def test_nondeterminism_robustness(runner: CliRunner,trained_model_path, tmp_path_factory):
     evaluate(runner,trained_model_path) # creates classification_report.json for original model
     original_score_path=str(trained_model_path / "classification_report.json")
@@ -80,6 +79,7 @@ def test_nondeterminism_robustness(runner: CliRunner,trained_model_path, tmp_pat
         new_score = json_data["accuracy"]
         assert abs(original_score - new_score) <=0.20
 
+# Test for non-determinism robustness and use data slices to test model capabilities.
 def test_data_slice(runner: CliRunner,trained_model_path, tmp_path_factory):
     evaluate(runner,trained_model_path) # creates classification_report.json for original model
     original_score_path=str(trained_model_path / "classification_report.json")
