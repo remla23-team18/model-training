@@ -245,14 +245,14 @@ pywin32 = ["pywin32 (>=227)"]
 
 [[package]]
 name = "atpublic"
-version = "3.1.1"
+version = "4.0"
 description = "Keep all y'all's __all__'s in sync"
 category = "main"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "atpublic-3.1.1-py3-none-any.whl", hash = "sha256:37f714748e77b8a7b34d59b7b485fd452a0d5906be52cb1bd28d29a2bd84f295"},
-    {file = "atpublic-3.1.1.tar.gz", hash = "sha256:3098ee12d0107cc5009d61f4e80e5edcfac4cda2bdaa04644af75827cb121b18"},
+    {file = "atpublic-4.0-py3-none-any.whl", hash = "sha256:80057c55641253b86dcb68b524f82328172371b6547d4c7462a9127fbfbbabfc"},
+    {file = "atpublic-4.0.tar.gz", hash = "sha256:0f40433219e124edf115c6c363808ca6f0e1cfa7d160d86b2fb94793086d1294"},
 ]
 
 [[package]]
