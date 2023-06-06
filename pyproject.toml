@@ -67,7 +67,7 @@ tests = ["tests", "*/tests"]
 
 [tool.coverage.run]
 branch = true
-source = ["model_training", "tests"]
+source = ["model_training"]
 
 [tool.coverage.report]
 show_missing = true

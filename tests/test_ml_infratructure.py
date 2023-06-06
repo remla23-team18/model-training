@@ -1,14 +1,16 @@
-"""Integration test for the full ML pipeline"""
+"""Integration test for the full ML pipeline."""
 
-import pytest
 from pathlib import Path
-import json
-from click.testing import CliRunner
-from model_training.evaluate import evaluate_model
-from model_training.train import train_model
-from model_training.preprocess import preprocess_dataset_cli
 
-def preprocess(runner: CliRunner, tmp_path: Path):
+from click.testing import CliRunner
+from click.testing import Result
+
+from model_training.evaluate import evaluate_model
+from model_training.preprocess import preprocess_dataset_cli
+from model_training.train import train_model
+
+
+def _preprocess(runner: CliRunner, tmp_path: Path) -> Result:
     return runner.invoke(
         preprocess_dataset_cli,
         [
@@ -19,7 +21,17 @@ def preprocess(runner: CliRunner, tmp_path: Path):
         ],
     )
 
-def train(runner: CliRunner, path: Path, random_state: int = 0,preprocessed_dataset_path ="tests/resources/a2_RestaurantReviews_Preprocessed.tsv"):
+
+def _train(
+    runner: CliRunner,
+    path: Path,
+    random_state: int = 0,
+    preprocessed_dataset_path: Path | None = None,
+) -> Result:
+    if preprocessed_dataset_path is None:
+        preprocessed_dataset_path = Path(
+            "tests/resources/a2_RestaurantReviews_Preprocessed.tsv"
+        )
     count_vectorizer_artifact_name = "cv.pkl"
     classifier_artifact_name = "clf"
 
@@ -36,15 +48,25 @@ def train(runner: CliRunner, path: Path, random_state: int = 0,preprocessed_data
             "--classifier-artifact-name",
             classifier_artifact_name,
             "--preprocessed-dataset-path",
-            preprocessed_dataset_path,
+            str(preprocessed_dataset_path),
             "--split-random-state",
-            random_state,
+            str(random_state),
             "--test-size",
             "0.2",
         ],
     )
 
-def evaluate(runner: CliRunner, path: Path, random_state: int = 0,preprocessed_dataset_path ="tests/resources/a2_RestaurantReviews_Preprocessed.tsv"):
+
+def _evaluate(
+    runner: CliRunner,
+    path: Path,
+    random_state: int = 0,
+    preprocessed_dataset_path: Path | None = None,
+) -> Result:
+    if preprocessed_dataset_path is None:
+        preprocessed_dataset_path = Path(
+            "tests/resources/a2_RestaurantReviews_Preprocessed.tsv"
+        )
     count_vectorizer_artifact_name = "cv.pkl"
     classifier_artifact_name = "clf"
     models_path = path / "models"
@@ -58,22 +80,36 @@ def evaluate(runner: CliRunner, path: Path, random_state: int = 0,preprocessed_d
             "--classifier-artifact-name",
             classifier_artifact_name,
             "--preprocessed-dataset-path",
-            preprocessed_dataset_path,
+            str(preprocessed_dataset_path),
             "--split-random-state",
-            random_state,
+            str(random_state),
             "--test-size",
             "0.2",
             "--report-path",
             str(path / "classification_report.json"),
         ],
     )
-    
 
-# Integration test for the full ML pipeline
-def test_pipeline(runner: CliRunner, tmp_path: Path):
-    assert preprocess(runner, tmp_path).exit_code == 0 # preprocesses data
+
+def test_pipeline(runner: CliRunner, tmp_path: Path) -> None:
+    """It runs the full ML pipeline. All steps should succeed."""
+    assert _preprocess(runner, tmp_path).exit_code == 0  # preprocesses data
     assert (tmp_path / "test_preprocessed.tsv").exists()
-    assert train(runner, tmp_path,preprocessed_dataset_path=str(tmp_path / "test_preprocessed.tsv")).exit_code == 0 # trains model
+    assert (
+        _train(
+            runner,
+            tmp_path,
+            preprocessed_dataset_path=tmp_path / "test_preprocessed.tsv",
+        ).exit_code
+        == 0
+    )  # trains model
     assert (tmp_path / "models").exists()
-    assert evaluate(runner,tmp_path,preprocessed_dataset_path=str(tmp_path / "test_preprocessed.tsv")).exit_code == 0 # evaluates model
+    assert (
+        _evaluate(
+            runner,
+            tmp_path,
+            preprocessed_dataset_path=tmp_path / "test_preprocessed.tsv",
+        ).exit_code
+        == 0
+    )  # evaluates model
     assert (tmp_path / "classification_report.json").exists()
