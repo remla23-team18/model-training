@@ -2,3 +2,7 @@ outs:
 - md5: 102f1f4193e0bdebdd6cce7f13e0a839
   size: 54686
   path: a1_RestaurantReviews_HistoricDump.tsv
+  cloud:
+    gcp-remla:
+      etag: 08a7d49fa3adaeff021001
+      version_id: '1686044515232295'
