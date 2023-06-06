@@ -13,7 +13,7 @@ stages:
         test_size: 0.2
     outs:
     - path: models
-      md5: 923a123b0248f2d411f8fe1f5d3ca066.dir
+      md5: 1d73a3cf663b20207600308abfbf1a70.dir
       size: 86040
       nfiles: 2
   preprocess:
@@ -26,11 +26,15 @@ stages:
     - path: a2_RestaurantReviews_Preprocessed.tsv
       md5: 5fb43a68c3ec5b122224b5fcf73aaada
       size: 31609
+      cloud:
+        gcp-remla:
+          etag: 08f29dbca3adaeff021001
+          version_id: '1686044515700466'
   evaluate:
     cmd: poetry run model-training evaluate --params-path params.yaml
     deps:
     - path: models
-      md5: 923a123b0248f2d411f8fe1f5d3ca066.dir
+      md5: 1d73a3cf663b20207600308abfbf1a70.dir
       size: 86040
       nfiles: 2
     params:
@@ -39,5 +43,5 @@ stages:
         test_size: 0.2
     outs:
     - path: classification_report.json
-      md5: e527c39e7bcdc6e91b4ed4df64eec7ad
-      size: 520
+      md5: 3790aefae122525b61a95930d4d059c6
+      size: 612

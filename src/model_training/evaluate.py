@@ -112,4 +112,4 @@ def evaluate_model(
 
     logger.debug("Saving the classification report...")
     report_path.parent.mkdir(parents=True, exist_ok=True)
-    report_path.write_text(json.dumps(report))
+    report_path.write_text(json.dumps(report, indent=2))
