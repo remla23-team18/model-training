@@ -3987,13 +3987,13 @@ test = ["pytest"]
 
 [[package]]
 name = "sqltrie"
-version = "0.3.1"
+version = "0.4.0"
 description = "SQL-based prefix tree inspired by pygtrie and python-diskcache"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "sqltrie-0.3.1-py3-none-any.whl", hash = "sha256:8cbb616049ab50cf543c605d0c4c72bc2eadfa94e90823227f7e01acf2ca7b69"},
-    {file = "sqltrie-0.3.1.tar.gz", hash = "sha256:63d562dc90dc88f1de6bacb3c1c8796b127544f84fd670bcca64f96c92695e53"},
+    {file = "sqltrie-0.4.0-py3-none-any.whl", hash = "sha256:aa7c9d4fe95c5f9215fbb4343af6ab418aece529206511b29a35006fd5d54036"},
+    {file = "sqltrie-0.4.0.tar.gz", hash = "sha256:40db3a6057f8e61930a7f4afd065c6b3c0d376887c150485356254b833db33dd"},
 ]
 
 [package.dependencies]
