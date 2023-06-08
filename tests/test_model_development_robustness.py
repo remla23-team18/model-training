@@ -121,7 +121,7 @@ def test_nondeterminism_robustness(
 def test_data_slice(
     runner: CliRunner, trained_model_path: Path, tmp_path_factory: TempPathFactory
 ) -> None:
-    """Test for non-determinism robustness and use data slices."""
+    """Test for non-determinism robustness and use data slices that contaion only positive reviews."""
     _evaluate(
         runner, trained_model_path
     )  # creates classification_report.json for original model
@@ -135,7 +135,7 @@ def test_data_slice(
         runner,
         tmp_path,
         preprocessed_dataset_path=Path(
-            "tests/resources/restaurant_reviews_test_preprocessed.tsv"
+            "tests/resources/preprocessed_positive_only.tsv"
         ),
     )
     tmp_score_path = str(tmp_path / "classification_report.json")
