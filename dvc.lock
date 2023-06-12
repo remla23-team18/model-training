@@ -13,21 +13,9 @@ stages:
         test_size: 0.2
     outs:
     - path: models
-      files:
-      - relpath: c1_BoW_Sentiment_Model.pkl
-        md5: 4cee9b5cab76267828e0b2fcad8c7124
-        size: 39825
-        cloud:
-          gcp-remla:
-            etag: 08c7cdcb99f4aeff021001
-            version_id: '1686063553898183'
-      - relpath: c2_Classifier_Sentiment_Model
-        md5: 2d5a3a7cc92e92406be4edf52dd19be0
-        size: 46215
-        cloud:
-          gcp-remla:
-            etag: 08d9eca699f4aeff021001
-            version_id: '1686063553295961'
+      md5: fd182a25ecef71a326005076717e59e5.dir
+      size: 86040
+      nfiles: 2
   preprocess:
     cmd: poetry run model-training preprocess-dataset
     deps:
@@ -46,7 +34,7 @@ stages:
     cmd: poetry run model-training evaluate --params-path params.yaml
     deps:
     - path: models
-      md5: 1d73a3cf663b20207600308abfbf1a70.dir
+      md5: fd182a25ecef71a326005076717e59e5.dir
       size: 86040
       nfiles: 2
     params:
