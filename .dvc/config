@@ -3,4 +3,4 @@
     remote = gcp-remla
 ['remote "gcp-remla"']
     url = gs://remla23-team18
-    version_aware = true
+    version_aware = false
