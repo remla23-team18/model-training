@@ -37,6 +37,7 @@ nox.options.sessions = (
     "docs-build",
     "pylint",
     "mllint",
+    "dvc",
 )
 
 
@@ -262,3 +263,13 @@ def mllint(session: Session) -> None:
         "--cov=model_training",
     )
     session.run("mllint", "run", "-f", "-o", "mllint-report.md")
+
+
+@session(python=python_versions[0])
+def dvc(session: Session) -> None:
+    """Check dvc status."""
+    session.poetry.installroot()
+    session.run("dvc", "repro")
+    out = session.run("dvc", "status", silent=True)
+    if "Data and pipelines are up to date." not in out:
+        session.error("DVC status is not up to date")
