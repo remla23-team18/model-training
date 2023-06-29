@@ -270,6 +270,7 @@ def dvc(session: Session) -> None:
     """Check dvc status."""
     session.poetry.installroot()
     session.run("dvc", "repro", "--allow-missing")
+    session.run("dvc", "pull")
     out = session.run("dvc", "data", "status", "--not-in-remote", silent=True)
     if "Not in remote" not in out:
         session.error("DVC data in remote is not up to date: %s", out)
