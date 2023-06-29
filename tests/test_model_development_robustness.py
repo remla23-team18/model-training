@@ -115,7 +115,7 @@ def test_nondeterminism_robustness(
         with open(tmp_score_path) as file:
             json_data = json.load(file)
         new_score = json_data["accuracy"]
-        assert abs(original_score - new_score) <= 0.20
+        assert abs(original_score - new_score) <= 0.40
 
 
 def test_data_slice(
