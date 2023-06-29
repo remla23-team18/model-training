@@ -22,6 +22,7 @@ jobs:
           - { python: "3.10", os: "ubuntu-latest", session: "tests" }
           - { python: "3.10", os: "ubuntu-latest", session: "typeguard" }
           - { python: "3.10", os: "ubuntu-latest", session: "pylint" }
+          - { python: "3.10", os: "ubuntu-latest", session: "dvc" }
 
     env:
       NOXSESSION: ${{ matrix.session }}
